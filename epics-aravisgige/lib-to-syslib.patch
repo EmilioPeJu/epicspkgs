@@ -1,0 +1,53 @@
+diff --git a/Makefile b/Makefile
+index 0299d17..3866918 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,9 +2,9 @@
+ TOP = .
+ include $(TOP)/configure/CONFIG
+ DIRS := $(DIRS) configure
+-DIRS := $(DIRS) vendor
++#DIRS := $(DIRS) vendor
+ DIRS := $(DIRS) aravisGigEApp
+-aravisGigEApp_DEPEND_DIRS += vendor
++#aravisGigEApp_DEPEND_DIRS += vendor
+ ifeq ($(BUILD_IOCS), YES)
+ DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard iocs))
+ iocs_DEPEND_DIRS += aravisGigEApp
+diff --git a/aravisGigEApp/src/Makefile b/aravisGigEApp/src/Makefile
+index 0d35d80..01a2a42 100644
+--- a/aravisGigEApp/src/Makefile
++++ b/aravisGigEApp/src/Makefile
+@@ -19,17 +19,11 @@ aravisCamera_SRCS += aravisCamera.cpp
+ DBD += aravisCameraSupport.dbd
+ 
+ USR_INCLUDES +=  $(addprefix -I, $(GLIB_INCLUDE))
++USR_INCLUDES += $(addprefix -I, $(ARAVIS_INCLUDE))
+ 
+-# We need to link against aravis
+-ifeq (linux-x86_64, $(findstring linux-x86_64, $(T_A)))
+-	USR_INCLUDES_Linux += -I$(TOP)/vendor/aravis-linux-x86_64/include/aravis-0.6
+-else ifeq (linux-x86, $(findstring linux-x86, $(T_A)))
+-	USR_INCLUDES_Linux += -I$(TOP)/vendor/aravis-linux-x86/include/aravis-0.6
+-endif
+-
+-USR_LIBS += glib-2.0
++USR_SYS_LIBS += glib-2.0
+ 
+ # TODO: should pick this up from the vendor directory
+-USR_LIBS += aravis-0.6
++USR_SYS_LIBS += aravis-0.6
+ 
+ include $(TOP)/configure/RULES
+diff --git a/configure/CONFIG_SITE b/configure/CONFIG_SITE
+index 4df968f..62b9d29 100644
+--- a/configure/CONFIG_SITE
++++ b/configure/CONFIG_SITE
+@@ -15,7 +15,6 @@
+ # Set CHECK_RELEASE to WARN to perform consistency checking but
+ #   continue building anyway if conflicts are found.
+ CHECK_RELEASE = YES
+-
+ # Set this when you only want to compile this application
+ #   for a subset of the cross-compiled target architectures
+ #   that Base is built for.

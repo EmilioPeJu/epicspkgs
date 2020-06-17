@@ -1,0 +1,27 @@
+diff --git a/Makefile b/Makefile
+index cc47ca1..d1c6ca8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ TOP = .
+ include $(TOP)/configure/CONFIG
+ DIRS := $(DIRS) configure
+-DIRS := $(DIRS) vendor
++#DIRS := $(DIRS) vendor
+ DIRS := $(DIRS) ffmpegServerApp
+-ffmpegServerApp_DEPEND_DIRS += vendor
++#ffmpegServerApp_DEPEND_DIRS += vendor
+ include $(TOP)/configure/RULES_TOP
+diff --git a/ffmpegServerApp/src/Makefile b/ffmpegServerApp/src/Makefile
+index fde469a..ab2723c 100644
+--- a/ffmpegServerApp/src/Makefile
++++ b/ffmpegServerApp/src/Makefile
+@@ -42,7 +42,7 @@ endif
+ USR_INCLUDES += -I$(TOP)/vendor/ffmpeg-$(VENDORARCH)/include
+ 		
+ # build the ffmpeg libs (or stubs on windows) into the binaries
+-LIB_LIBS += avdevice avformat avcodec swresample swscale avutil
++LIB_SYS_LIBS_Linux += avdevice avformat avcodec swresample swscale avutil
+ LIB_LIBS += NDPlugin
+ LIB_SYS_LIBS_WIN32 += user32
+ 		
